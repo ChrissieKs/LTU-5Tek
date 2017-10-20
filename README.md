@@ -10,8 +10,8 @@ In order for this code to work:
   5. Download the libary for Adafruit NeoPixel, and include it.
   
 For WINDOWS user:
-  6. Install a driver from Adafruit for Gemma M0. (https://learn.adafruit.com/adafruit-gemma-m0/windows-driver-installation).
-  7. Choose the right PORT!
+  1. Install a driver from Adafruit for Gemma M0. (https://learn.adafruit.com/adafruit-gemma-m0/windows-driver-installation).
+  2. Choose the right PORT!
   
 Good luck!
   
