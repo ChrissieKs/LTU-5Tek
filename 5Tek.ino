@@ -2,11 +2,14 @@
 #ifdef __AVR__
 #include <avr/power.h>
 #endif
-#define PIN 0          // PIN have to be 0.
+#define PIN 0          
 
-int brightness = 20;   // Max is 255!
-int waitTime = 100;    // The waiting time, after each method
+/*
+ * This is a multi line comment. TO REMOVE SOMETHING: Comment it with a sigle line comment like this:
+ */
 
+// This is a single line comment.
+ 
 /*
  * Creating an Adafruit neopixel object with the following parameters:
  *   Parameter 1 = number of pixels in strip
@@ -15,30 +18,55 @@ int waitTime = 100;    // The waiting time, after each method
  */
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, PIN, NEO_GRB + NEO_KHZ800);
 
+// sprip.Color(RED,GREEN,BLUE)
+int white = strip.Color(255, 255, 255);
+int red = strip.Color(255, 0, 0);
+int green = strip.Color(0, 255, 0);
+int blue = strip.Color(0, 0, 255);
+int orange = strip.Color(255, 128, 0);
+int yellow = strip.Color(255, 255, 0);
+int turquoise = strip.Color(0, 255, 255); 
+int purple = strip.Color(127, 0, 255);
+int pink = strip.Color(255, 0, 127);
+int grey = strip.Color(128, 128, 128);
+
+int waitTime = 100;    // The waiting time, after each method
+
+
+/*
+ * This method initialize the strip.
+ */
 void setup() {
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
+  strip.setBrightness(20);  // Change the brightness of your NeoPixel here. OBS! Max is 255!
 }
 
 // This loop repeat the process forever.
 void loop() {
-// Test Pixels with a single color on all the LEDS:
-  colorWipe(strip.Color(brightness, 0, 0), waitTime); // Red
-  colorWipe(strip.Color(0, brightness, 0), waitTime); // Green
-  colorWipe(strip.Color(0, 0, brightness), waitTime); // Blue
+// Test Pixels with a single color on all the LEDS. 
+  colorWipe(red, waitTime); 
+  colorWipe(green, waitTime); 
+  colorWipe(blue, waitTime); 
   
-  theaterChase(strip.Color(brightness, brightness, brightness), waitTime); // theaterchase White
-  theaterChase(strip.Color(brightness, 0, 0), waitTime);  // theatherchase Red
-  theaterChase(strip.Color(0, 0, brightness), waitTime);  // theaterchase Blue
+  theaterChase(white, waitTime); 
+  theaterChase(red, waitTime);  
+  theaterChase(blue, waitTime);  
 
-// Call the methods below
+// Calling the methods below
   rainbow(waitTime);
   rainbowCycle(waitTime);
   theaterChaseRainbow(waitTime);
 }
 
 /*
- * Fill the strip one LED after the other with a color
+ * DO NOT CHANGE ANYTHING BELOW THIS LINE!!
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+ 
+/*
+ * Fills the strip one LED after the other with a color
  * Parameter 1 = Color
  * Parameter 2 = Global variable waitTime
  */
@@ -57,9 +85,9 @@ void colorWipe(uint32_t color, uint8_t wait) {
 void rainbow(uint8_t wait) {
   uint16_t i, j;
 
-  for(j=0; j<(brightness+1); j++) {
+  for(j=0; j<(256); j++) {
     for(i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel((i+j) & brightness));
+      strip.setPixelColor(i, Wheel((i+j) & 255));
     }
     strip.show();
     delay(wait);
@@ -75,7 +103,7 @@ void rainbowCycle(uint8_t wait) {
 
   for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
     for(i=0; i< strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & brightness));
+      strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & 255));
     }
     strip.show();
     delay(wait);
@@ -112,7 +140,7 @@ void theaterChaseRainbow(uint8_t wait) {
   for (int j=0; j < 256; j++) {     // cycle all 256 colors in the wheel
     for (int q=0; q < 3; q++) {
       for (uint16_t i=0; i < strip.numPixels(); i=i+3) {
-        strip.setPixelColor(i+q, Wheel( (i+j) % brightness));    //turn every third pixel on
+        strip.setPixelColor(i+q, Wheel( (i+j) % 255));    //turn every third pixel on
       }
       strip.show();
 
@@ -125,18 +153,16 @@ void theaterChaseRainbow(uint8_t wait) {
   }
 }
 
-/*
- * The colours are a transition r - g - b - back to r.
- */
+
 uint32_t Wheel(byte WheelPos) {
-  WheelPos = brightness - WheelPos;
+  WheelPos = 255 - WheelPos;
   if(WheelPos < 85) {
-    return strip.Color(brightness - WheelPos * 3, 0, WheelPos * 3);
+    return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
   }
   if(WheelPos < 170) {
     WheelPos -= 85;
-    return strip.Color(0, WheelPos * 3, brightness - WheelPos * 3);
+    return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
   }
   WheelPos -= 170;
-  return strip.Color(WheelPos * 3, brightness - WheelPos * 3, 0);
+  return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
